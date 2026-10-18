@@ -1,0 +1,24 @@
+name: 'Env Vault Action'
+description: 'Zero-dependency GitHub Action for decrypting .env.vault files and injecting masked secrets into CI/CD pipelines'
+author: 'Abdelmalek'
+
+branding:
+  icon: 'shield'
+  color: 'gray-dark'
+
+inputs:
+  vault-file:
+    description: 'Relative path to the encrypted .env.vault artifact'
+    required: false
+    default: '.env.vault'
+  vault-key:
+    description: 'Master decryption key used by env-vault-cli (AES-256-GCM)'
+    required: true
+  fail-on-empty:
+    description: 'Fail the workflow step if the decrypted vault contains no secrets'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'node20'
+  main: 'dist/main.js'
