@@ -1,0 +1,19 @@
+{
+  "name": "env-vault-action",
+  "version": "1.0.0",
+  "description": "Zero-dependency GitHub Action for .env.vault AES-256-GCM decryption",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "github-action",
+    "dotenv",
+    "env-vault",
+    "aes-256-gcm",
+    "secrets"
+  ],
+  "author": "Abdelmalek",
+  "license": "MIT"
+}
