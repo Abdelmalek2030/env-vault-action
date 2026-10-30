@@ -23,7 +23,7 @@ bench:
 
 security-audit:
 	@echo "==> Verifying zero external runtime dependencies..."
-	@node -e "const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json','utf8')); if(p.dependencies && Object.keys(p.dependencies).length>0) process.exit(1);"
+	@node -e "const fs=require('fs'); const path=require('path'); const file=path.join(process.cwd(), 'package.json'); const p=JSON.parse(fs.readFileSync(file,'utf8')); if(p.dependencies && Object.keys(p.dependencies).length>0) process.exit(1);"
 	@echo "OK: Zero-dependency invariant verified."
 
 clean:
