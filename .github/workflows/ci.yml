@@ -49,6 +49,7 @@ jobs:
             fs.writeFileSync(".env.vault.ci", envVault, "utf8");
           '
 
+
       - name: Run env-vault-action Locally
         id: vault_step
         uses: ./
