@@ -23,7 +23,7 @@ bench:
 
 security-audit:
 	@echo "==> Verifying zero external runtime dependencies..."
-	@node -e 'const p=require("./package.json"); if(p.dependencies && Object.keys(p.dependencies).length > 0) process.exit(1);'
+	@$(NODE) scripts/audit.js
 	@echo "OK: Zero-dependency invariant verified."
 
 clean:
