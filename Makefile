@@ -23,8 +23,16 @@ bench:
 
 security-audit:
 	@echo "==> Verifying zero external runtime dependencies..."
-	@$(NODE) scripts/audit.js
-	@echo "OK: Zero-dependency invariant verified."
+	@node -e ' \
+		const fs = require("node:fs"); \
+		const content = fs.readFileSync("package.json", "utf8"); \
+		const pkg = JSON.parse(content); \
+		if (pkg.dependencies && Object.keys(pkg.dependencies).length > 0) { \
+			console.error("Violation: External dependencies detected!"); \
+			process.exit(1); \
+		} \
+		console.log("OK: Zero-dependency invariant verified."); \
+	'
 
 clean:
 	@rm -rf coverage *.log .env.tmp*
