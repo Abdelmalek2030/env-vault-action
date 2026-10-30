@@ -1,0 +1,32 @@
+name: Continuous Cryptographic Fuzzing
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    name: Cryptographic & Heredoc Injection Fuzzer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Execute Fuzzing Harness (2,700 Iterations)
+        run: make fuzz
+
+      - name: Execute Throughput & Latency Benchmark
+        run: make bench
