@@ -1,0 +1,42 @@
+name: 'Env Vault Action (Zero-Dependency AES-256-GCM)'
+author: 'Abdelmalek2030'
+description: 'Official zero-dependency GitHub Action for env-vault-cli. Authenticates and decrypts .env.vault files into GITHUB_ENV with automatic CI log masking.'
+
+branding:
+  icon: 'shield'
+  color: 'green'
+
+inputs:
+  vault-file:
+    description: 'Path to the encrypted .env.vault file.'
+    required: false
+    default: '.env.vault'
+  vault-key:
+    description: 'Master passphrase used to derive the 256-bit scrypt decryption key.'
+    required: true
+  export-env:
+    description: 'Export decrypted variables to $GITHUB_ENV using CSPRNG heredoc delimiters.'
+    required: false
+    default: 'true'
+  export-file:
+    description: 'Write decrypted variables atomically to a local .env file with POSIX 0600 permissions.'
+    required: false
+    default: 'false'
+  output-path:
+    description: 'Target file path when export-file is enabled.'
+    required: false
+    default: '.env'
+  allow-unsafe-keys:
+    description: 'Allow restricted environment variables (e.g., LD_PRELOAD, NODE_OPTIONS).'
+    required: false
+    default: 'false'
+
+outputs:
+  keys-count:
+    description: 'Total number of environment variables authenticated and decrypted.'
+  vault-version:
+    description: 'Authenticated wire protocol version of the decrypted vault envelope (e.g., v1).'
+
+runs:
+  using: 'node20'
+  main: 'src/index.js'
