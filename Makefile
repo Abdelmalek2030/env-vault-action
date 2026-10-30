@@ -23,7 +23,15 @@ bench:
 
 security-audit:
 	@echo "==> Verifying zero external runtime dependencies..."
-	@$(NODE) -e 'const pkg = require("./package.json"); if (pkg.dependencies && Object.keys(pkg.dependencies).length > 0) { console.error("Violation: External dependencies detected!"); process.exit(1); }'
+	@$(NODE) -e ' \
+		const path = require("node:path"); \
+		const pkgPath = path.join(process.cwd(), "package.json"); \
+		const pkg = require(pkgPath); \
+		if (pkg.dependencies && Object.keys(pkg.dependencies).length > 0) { \
+			console.error("Violation: External dependencies detected!"); \
+			process.exit(1); \
+		} \
+	'
 	@echo "OK: Zero-dependency invariant verified."
 
 clean:
