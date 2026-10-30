@@ -1,19 +1,32 @@
 {
   "name": "env-vault-action",
   "version": "1.0.0",
-  "description": "Zero-dependency GitHub Action for .env.vault AES-256-GCM decryption",
-  "main": "dist/main.js",
+  "description": "Official zero-dependency GitHub Action for env-vault-cli AES-256-GCM secret decryption and CI/CD environment injection.",
+  "main": "src/index.js",
   "scripts": {
-    "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "lint": "node --check src/index.js && node --check tests/fuzz.js",
+    "test": "node --test tests/*.test.js",
+    "fuzz": "node tests/fuzz.js",
+    "bench": "node scripts/benchmark.js",
+    "security-audit": "node -e 'const pkg = require(\"./package.json\"); if (pkg.dependencies && Object.keys(pkg.dependencies).length > 0) process.exit(1);'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdelmalek2030/env-vault-action.git"
   },
   "keywords": [
-    "github-action",
-    "dotenv",
+    "github-actions",
     "env-vault",
     "aes-256-gcm",
-    "secrets"
+    "scrypt",
+    "dotenv",
+    "secrets-management",
+    "zero-dependency",
+    "security"
   ],
-  "author": "Abdelmalek",
-  "license": "MIT"
+  "author": "Abdelmalek2030 <Abdelmalek2030github@hotmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
