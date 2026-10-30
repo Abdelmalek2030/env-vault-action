@@ -38,7 +38,7 @@ jobs:
       - name: Execute Unit & Security Test Suite
         run: make test
 
-      - name: Self-Dogfooding Action Integration Test
+      - name: Prepare Local Test Vault Envelope
         env:
           TEST_VAULT_PASSPHRASE: 'ci-self-test-master-passphrase-2026'
         run: |
@@ -48,7 +48,6 @@ jobs:
             const envVault = encryptEnvelope("CI_DOGFOOD_SECRET=\"verified_ok_2026\"\n", process.env.TEST_VAULT_PASSPHRASE);
             fs.writeFileSync(".env.vault.ci", envVault, "utf8");
           '
-
 
       - name: Run env-vault-action Locally
         id: vault_step
