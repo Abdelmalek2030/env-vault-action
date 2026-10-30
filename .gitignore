@@ -1,0 +1,19 @@
+# Node & Build Artifacts
+node_modules/
+coverage/
+*.log
+npm-debug.log*
+
+# Plaintext Secrets Protection (Never commit unencrypted .env)
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.vault
+
+# OS & Editor Artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
