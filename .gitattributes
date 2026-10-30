@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Force GitHub Linguist 100% language calculation on core source
+docs/** linguist-documentation=true
+*.md linguist-documentation=true
+.github/** linguist-vendored=true
+tests/** linguist-vendored=true
+scripts/** linguist-vendored=true
+Makefile linguist-vendored=true
+action.yml linguist-vendored=true
