@@ -23,16 +23,8 @@ bench:
 
 security-audit:
 	@echo "==> Verifying zero external runtime dependencies..."
-	@node -e ' \
-		const fs = require("node:fs"); \
-		const content = fs.readFileSync("package.json", "utf8"); \
-		const pkg = JSON.parse(content); \
-		if (pkg.dependencies && Object.keys(pkg.dependencies).length > 0) { \
-			console.error("Violation: External dependencies detected!"); \
-			process.exit(1); \
-		} \
-		console.log("OK: Zero-dependency invariant verified."); \
-	'
+	@node -e "const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json','utf8')); if(p.dependencies && Object.keys(p.dependencies).length>0) process.exit(1);"
+	@echo "OK: Zero-dependency invariant verified."
 
 clean:
 	@rm -rf coverage *.log .env.tmp*
