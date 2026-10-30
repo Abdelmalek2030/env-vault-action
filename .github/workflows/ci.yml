@@ -1,0 +1,67 @@
+name: CI Matrix & Quality Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gate:
+    name: Node.js ${{ matrix.node-version }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node-version: ['18.x', '20.x', '22.x']
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Verify Syntax & Lint
+        run: make lint
+
+      - name: Verify Zero-Dependency Invariant
+        run: make security-audit
+
+      - name: Execute Unit & Security Test Suite
+        run: make test
+
+      - name: Self-Dogfooding Action Integration Test
+        env:
+          TEST_VAULT_PASSPHRASE: 'ci-self-test-master-passphrase-2026'
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const { encryptEnvelope } = require("./src/crypto");
+            const envVault = encryptEnvelope("CI_DOGFOOD_SECRET=\"verified_ok_2026\"\n", process.env.TEST_VAULT_PASSPHRASE);
+            fs.writeFileSync(".env.vault.ci", envVault, "utf8");
+          '
+
+      - name: Run env-vault-action Locally
+        id: vault_step
+        uses: ./
+        with:
+          vault-file: '.env.vault.ci'
+          vault-key: 'ci-self-test-master-passphrase-2026'
+          export-env: 'true'
+          export-file: 'true'
+          output-path: '.env.ci.decrypted'
+
+      - name: Verify Injected GITHUB_ENV & Action Outputs
+        run: |
+          test "$CI_DOGFOOD_SECRET" = "verified_ok_2026"
+          test "${{ steps.vault_step.outputs.keys-count }}" = "1"
+          test "${{ steps.vault_step.outputs.vault-version }}" = "v1"
+          rm -f .env.vault.ci .env.ci.decrypted
